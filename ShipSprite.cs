@@ -12,7 +12,7 @@ namespace AngularDynamicsExercise;
 public class ShipSprite
 {
     const float LINEAR_ACCELERATION = 10;
-    
+    const float ANGULAR_ACCELERATION = 5;
     public Game game;
     public Texture2D texture;
     public Vector2 position;
@@ -50,15 +50,16 @@ public class ShipSprite
     {
         KeyboardState keyboardState = Keyboard.GetState();
         float t = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
         Vector2 acceleration = new Vector2(0,0);
         float angularAcceleration = 0;
         if(keyboardState.IsKeyDown(Keys.Left))
         {
-            acceleration += direction * -LINEAR_ACCELERATION;
+            acceleration += direction * LINEAR_ACCELERATION;
             Vector2 r = new Vector2(30, 39);
             Vector2 force = new Vector2(0, 0.1f);
             float torque = force.X * r.Y + force.Y * r.X;
-            angularAcceleration = torque;
+            angularAcceleration += ANGULAR_ACCELERATION;
         }
         if(keyboardState.IsKeyDown(Keys.Right))
         {
@@ -66,12 +67,12 @@ public class ShipSprite
             Vector2 r = new Vector2(-30, 39);
             Vector2 force = new Vector2(0, 0.1f);
             float torque = force.X * r.Y + force.Y * r.X;
-            angularAcceleration = torque;
+            angularAcceleration -= ANGULAR_ACCELERATION;
         }
         angularVelocity += angularAcceleration * t;
         angle += angularVelocity * t;
         direction.X = (float)Math.Sin(angle);
-        direction.Y = (float)Math.Cos(angle);
+        direction.Y = (float)-Math.Cos(angle);
 
         velocity += acceleration * t;
         position += velocity * t;
